@@ -24,7 +24,7 @@ class ArticleSeeder extends Seeder
                 'image' => $faker->imageUrl($width = 640, $height = 480,'cats', true, 'Faker'),
                 'content' => $faker->paragraph(6),
                 'slug' => \Str::slug($title),
-                'created_at' => now(),
+                'created_at' => $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now'),
                 'updated_at' => now()
             ]);
         }
