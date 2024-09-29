@@ -5,11 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-
-Route::get('/',function(){
-    return view('front.homepage');
-});
-
+Route::get('/', [App\Http\Controllers\Front\Homepage::class, 'index'])->name('homepage'); 
 
 
 
