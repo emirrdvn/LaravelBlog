@@ -9,6 +9,7 @@ Route::get('/', [App\Http\Controllers\Front\Homepage::class, 'index'])->name('ho
 Route::get('sayfa', [App\Http\Controllers\Front\Homepage::class, 'index']);
 Route::get('/kategori/{slug}', [App\Http\Controllers\Front\Homepage::class, 'category'])->name('category');
 Route::get('/{category}/{slug}', [App\Http\Controllers\Front\Homepage::class, 'single'])->name('single');
+Route::get('/{sayfa}', [App\Http\Controllers\Front\Homepage::class, 'page'])->name('page');
 
 
 

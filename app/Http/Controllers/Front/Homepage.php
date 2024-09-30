@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Article;
+use App\Models\Page;
 
 
 class Homepage extends Controller
@@ -14,8 +15,8 @@ class Homepage extends Controller
     {
         $categories = Category::inRandomOrder()->get();
         $articles = Article::orderBy('created_at','desc')->paginate(1)->withPath(url('sayfa'));
-       
-        return view('front.homepage',compact('categories','articles'));
+        $pages = Page::orderBy('order','ASC')->get();   
+        return view('front.homepage',compact('categories','articles','pages'));
     }
     public function single($category,$slug){
         $category=Category::whereSlug($category)->first() ?? abort(403,'Böyle bir kategori bulunamadı');
@@ -30,4 +31,12 @@ class Homepage extends Controller
         $categories = Category::inRandomOrder()->get();
         return view('front.category',compact('articles','category','categories'));
     }
+
+    public function page($slug){
+        $page = Page::whereSlug($slug)->first() ?? abort(403,'Böyle bir sayfa bulunamadı');
+        #$categories = Category::inRandomOrder()->get();
+        $pages = Page::orderBy('order','ASC')->get(); 
+        return view('front.page',compact('page','pages'));
+    }
+
 }
