@@ -6,9 +6,16 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 /* Admin Routes */
+Route::prefix('admin')->name('admin.')->middleware('isLogin')->group(function(){
+Route::get('giris', [App\Http\Controllers\Back\AuthController::class, 'login'])->name('login');
+Route::post('giris', [App\Http\Controllers\Back\AuthController::class, 'loginpost'])->name('login.post');
+});
+Route::prefix('admin')->name('admin.')->middleware('isAdmin')->group(function(){
+    Route::get('panel', [App\Http\Controllers\Back\Dashboard::class, 'index'])->name('dashboard');
+    
+    Route::get('cikis', [App\Http\Controllers\Back\AuthController::class, 'logout'])->name('logout');
+});
 
-Route::get('admin/panel', [App\Http\Controllers\Back\Dashboard::class, 'index'])->name('admin.dashboard');
-Route::get('admin/giris', [App\Http\Controllers\Back\Auth::class, 'login'])->name('admin.login');
 
 
 /* Front Routes */
