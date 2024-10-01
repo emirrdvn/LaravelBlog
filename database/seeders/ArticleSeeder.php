@@ -21,7 +21,7 @@ class ArticleSeeder extends Seeder
             DB::table('articles')->insert([
                 'category' => rand(1, 7),
                 'title' => $title,
-                'image' => $faker->imageUrl($width = 640, $height = 480,'cats', true, 'Faker'),
+                'image' => $faker->imageUrl($width = 640, $height = 480,'cats', true),
                 'content' => $faker->paragraph(6),
                 'slug' => \Str::slug($title),
                 'created_at' => $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now'),
