@@ -47,7 +47,7 @@ class ArticleController extends Controller
             $article->image='uploads/'.$imageName;
         }
         $article->save();
-        toastr()->success('Makale başarıyla oluşturuldu.'); //toastr mesajı
+        #toastr()->success('Makale başarıyla oluşturuldu.'); //toastr mesajı
         return redirect()->route('admin.makaleler.index')->with('success','Makale başarıyla oluşturuldu.');
     }
 
@@ -64,7 +64,9 @@ class ArticleController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $article=Article::findOrFail($id);
+        $categories=Category::all();
+        return view('back.articles.update',compact('categories','article'));
     }
 
     /**
@@ -72,8 +74,34 @@ class ArticleController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'title'=>'min:3',
+            'image'=>'required|image|mimes:jpeg,png,jpg|max:2048'
+        ]);
+        $article = Article::findOrFail($id);
+        $article->title = $request->title;
+        $article->category = $request ->category;
+        $article->content = $request->content;
+        $article->slug= Str::of($request->title)->slug('-');
+        if($request->hasFile('image')){
+            $imageName = Str::of($request->title)->slug('-').'.'.$request->image->getClientOriginalExtension();
+            $request->image->move(public_path('uploads'),$imageName);
+            $article->image='uploads/'.$imageName;
+        }
+        $article->save();
+        #toastr()->success('Makale başarıyla oluşturuldu.'); //toastr mesajı
+        return redirect()->route('admin.makaleler.index')->with('success','Makale başarıyla Güncellendi.');
     }
+
+    public function switch(Request $request)
+    {
+        $article = Article::findOrFail($request->id);
+        $article->status = $request->statu == 'true' ? 1 : 0;
+        $article->save();
+    }
+    
+
+
 
     /**
      * Remove the specified resource from storage.
