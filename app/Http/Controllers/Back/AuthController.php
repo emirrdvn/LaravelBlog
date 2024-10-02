@@ -17,9 +17,10 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
-            
+            toastr()->success('Hoşgeldiniz '.Auth::user()->name);
             return redirect()->route('admin.dashboard');
         }
+        toastr()->error('Email ve şifre uyuşmamaktadır.');
         return redirect()->route('admin.login')->withErrors('Email ve şifre uyuşmamaktadır.',);
     }
     public function logout()
