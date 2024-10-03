@@ -12,8 +12,12 @@ Route::post('giris', [App\Http\Controllers\Back\AuthController::class, 'loginpos
 });
 Route::prefix('admin')->name('admin.')->middleware('isAdmin')->group(function(){
     Route::get('panel', [App\Http\Controllers\Back\Dashboard::class, 'index'])->name('dashboard');
+    Route::get('makaleler/silinenler', [App\Http\Controllers\Back\ArticleController::class, 'trashed'])->name('trashed.article');
     Route::resource('makaleler', App\Http\Controllers\Back\ArticleController::class);
     Route::get('/switch', [App\Http\Controllers\Back\ArticleController::class, 'switch'])->name('switch');
+    Route::get('/deletearticle/{id}', [App\Http\Controllers\Back\ArticleController::class, 'delete'])->name('delete.article');
+    Route::get('/harddeletearticle/{id}', [App\Http\Controllers\Back\ArticleController::class, 'hardDelete'])->name('hard.delete.article');
+    Route::get('/recoverarticle/{id}', [App\Http\Controllers\Back\ArticleController::class, 'recover'])->name('recover.article');
     Route::get('cikis', [App\Http\Controllers\Back\AuthController::class, 'logout'])->name('logout');
 });
 

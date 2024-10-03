@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('hit')->default(0);
             $table->string('status')->default(0)->comment('0: Pasif, 1: Aktif');
             $table->string('slug');
+            $table->softDeletes();
             $table->timestamps();
             $table->foreign('category')->references('id')->on('categories')->onDelete('cascade');
         });

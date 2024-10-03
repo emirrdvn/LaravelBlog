@@ -3,7 +3,9 @@
 @section('content')
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary"><strong>{{$articles->count()}}</strong> makale bulundu</h6>
+        <h6 class="m-0 font-weight-bold text-primary">@yield('title') <span class="float-right"><strong>{{$articles->count()}} makale bulundu </strong>
+            <a href="{{route('admin.trashed.article')}}" class="btn btn-warning btn-sm"> <i class="fa fa-trash"></i>Silinen makaleler </a></span>
+        </h6>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -32,13 +34,13 @@
                             <input class="switch" article-id="{{$article->id}}" type="checkbox" @if($article->status==1) checked @endif data-offstyle="danger" data-onstyle="success" data-toggle="toggle" data-on="Aktif" data-off="Pasif" >
                         </td>
                         <td>
-                            <a href=""  title="Görüntüle" class="btn btn-sm btn-success">
+                            <a target="_blank" href="{{route('single',[$article->getCategory->slug,$article->slug])}}"  title="Görüntüle" class="btn btn-sm btn-success">
                                 <i class="fa fa-eye"></i>
                             </a>
                             <a href="{{route('admin.makaleler.edit',$article->id)}}"  title="Düzenle" class="btn btn-sm btn-primary">
                                 <i class="fa fa-pen"></i>
                             </a>
-                            <a href="" title="Sil" class="btn btn-sm btn-danger">
+                            <a href="{{route('admin.delete.article',$article->id)}}" title="Sil" class="btn btn-sm btn-danger">
                                 <i class="fa fa-times"></i>
                             </a>
                         </td>
