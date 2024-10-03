@@ -17,6 +17,7 @@ class CategorySeeder extends Seeder
             DB::table('categories')->insert([
                 'name' => $category,
                 'slug' => \Str::slug($category),
+                
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
