@@ -26,6 +26,15 @@ Route::prefix('admin')->name('admin.')->middleware('isAdmin')->group(function(){
     Route::post('/kategoriler/delete', [App\Http\Controllers\Back\CategoryController::class, 'delete'])->name('category.delete');
     Route::get('/kategoriler/status', [App\Http\Controllers\Back\CategoryController::class, 'switch'])->name('category.switch');
     Route::get('/kategoriler/getData', [App\Http\Controllers\Back\CategoryController::class, 'getData'])->name('category.getdata');
+    // Sayfalar
+    Route::get('/sayfalar', [App\Http\Controllers\Back\PageController::class, 'index'])->name('page.index');
+    Route::get('/sayfa/switch', [App\Http\Controllers\Back\PageController::class, 'switch'])->name('page.switch');
+    Route::get('/sayfalar/create', [App\Http\Controllers\Back\PageController::class, 'create'])->name('page.create');
+    Route::post('/sayfalar/create', [App\Http\Controllers\Back\PageController::class, 'post'])->name('page.create.post');
+    Route::get('/sayfalar/update/{id}', [App\Http\Controllers\Back\PageController::class, 'update'])->name('page.edit');
+    Route::post('/sayfalar/update/{id}', [App\Http\Controllers\Back\PageController::class, 'updatePost'])->name('page.edit.post');
+    Route::get('/sayfalar/delete/{id}', [App\Http\Controllers\Back\PageController::class, 'delete'])->name('page.delete');
+
     Route::get('cikis', [App\Http\Controllers\Back\AuthController::class, 'logout'])->name('logout');
 });
 
