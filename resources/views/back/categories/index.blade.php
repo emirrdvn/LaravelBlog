@@ -50,6 +50,8 @@
                                         <input class="switch" category-id="{{$category->id}}" type="checkbox" @if($category->status==1) checked @endif data-offstyle="danger" data-onstyle="success" data-toggle="toggle" data-on="Aktif" data-off="Pasif" >
                                     </td>
                                     <td>
+                                        <a category-id="{{$category->id}}" class=" edit-click btn btn-sm btn-primary" title="Kategoriyi Düzenle"><i class="fa fa-edit text-white"></i></a>
+                                        <a category-id="{{$category->id}}" category-name="{{$category->name}}" category-count="{{$category->articleCount()}}" class=" remove-click btn btn-sm btn-danger" title="Kategoriyi Sil"><i class="fa fa-times text-white"></i></a>
                                         
                                     </td>
                                 </tr>
@@ -62,6 +64,69 @@
             </div>
     </div>
 </div>
+<!-- Modal -->
+<div id="editModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Kategoriyi Düzenle</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          
+        </div>
+        <div class="modal-body">
+          <form action="{{route('admin.category.update')}}" method="POST">
+            @csrf
+            <div class="form-group">
+                <label >Kategori Adı</label>
+                <input type="text" class="form-control" name="category">
+                <input type="hidden" name="id" id="category_id">
+            </div>
+            <div class="form-group">
+                <label >Kategori Slug</label>
+                <input type="text" class="form-control" name="slug">
+            </div>  
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+          <button type="submit"  class="btn btn-danger">Kaydet</button>
+        </div>
+    </form>
+      </div>
+  
+    </div>
+  </div>
+  <!-- Modal -->
+<div id="deleteModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content" >
+        <div class="modal-header">
+          <h4 class="modal-title">Kategoriyi Sil</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          
+        </div>
+        <div class="modal-body" id="body">
+            <div id="articleAlert" class="alert alert-danger"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+          <form action="{{route('admin.category.delete')}}" method="POST">
+            @csrf
+            <input type="hidden" name="id" id="deleteId">
+            <button type="submit" id="deleteButton"  class="btn btn-danger">Sil</button>
+        </form>
+          
+        </div>
+    </form>
+      </div>
+  
+    </div>
+  </div>
+
 @endsection
 @section('css')
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
@@ -70,6 +135,52 @@
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 <script>
     $(function() {
+        $('.edit-click').click(function() {
+            id = $(this)[0].getAttribute('category-id');
+            $.ajax({
+                type: 'GET',
+                url: '{{route('admin.category.getdata')}}',
+                data: {
+                    id: id
+                },
+                success: function(data) {
+                    
+                    $('#editModal input[name="category"]').val(data.name);
+                    $('#editModal input[name="slug"]').val(data.slug);
+                    $('#editModal input[name="id"]').val(data.id);
+                    $('#editModal').modal();
+                    //VİDEODA KULLANILAN KODLAR (Üstteki daha mantıklı çünkü düzenlemede eski verileri gösteriyor)
+                    //$('#category').val(data.name);
+                    //$('#slug').val(data.slug);
+                    //$('#category_id').val(data.id);
+                    //$('#editModal').modal();
+                }
+            }) 
+        })
+
+        $('.remove-click').click(function() {
+            id = $(this)[0].getAttribute('category-id');
+            count = $(this)[0].getAttribute('category-count');
+            name = $(this)[0].getAttribute('category-name');
+            if(id==1){
+                $('#articleAlert').html(name+' kategorisi silinemez!');
+                $('#body').show();
+                $('#deleteButton').hide();
+                $('#deleteModal').modal();
+                return;
+            }
+            $('#deleteButton').show();
+            $('#deleteId').val(id);
+            $('#articleAlert').html('');
+            $('#body').hide();
+            if(count>0){
+                $('#articleAlert').html('Bu kategoriye ait '+count+' makale bulunmaktadır. Silmek istediğinize emin misiniz?');
+                $('#body').show();
+            }
+            $('#deleteModal').modal();
+        })
+
+
         $('.switch').change(function() {
             id = $(this)[0].getAttribute('category-id');
             statu = $(this).prop('checked');
