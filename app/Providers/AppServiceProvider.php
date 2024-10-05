@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
-
+use App\Models\Config;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -20,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        view()->share('config',Config::find(1));
         Vite::prefetch(concurrency: 3);
     }
 }

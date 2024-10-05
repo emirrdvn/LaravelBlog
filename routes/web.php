@@ -5,6 +5,9 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+
+Route::get('site-bakimda',function(){return view('front.offline');});
+
 /* Admin Routes */
 Route::prefix('admin')->name('admin.')->middleware('isLogin')->group(function(){
 Route::get('giris', [App\Http\Controllers\Back\AuthController::class, 'login'])->name('login');
@@ -35,6 +38,11 @@ Route::prefix('admin')->name('admin.')->middleware('isAdmin')->group(function(){
     Route::post('/sayfalar/update/{id}', [App\Http\Controllers\Back\PageController::class, 'updatePost'])->name('page.edit.post');
     Route::get('/sayfalar/delete/{id}', [App\Http\Controllers\Back\PageController::class, 'delete'])->name('page.delete');
     Route::get('/sayfalar/orders', [App\Http\Controllers\Back\PageController::class, 'orders'])->name('page.orders');
+    //Ayarlar
+    Route::get('/ayarlar',[App\Http\Controllers\Back\ConfigController::class, 'index'])->name('config.index');
+    Route::post('/ayarlar/update',[App\Http\Controllers\Back\ConfigController::class, 'update'])->name('config.update');
+
+
 
     Route::get('cikis', [App\Http\Controllers\Back\AuthController::class, 'logout'])->name('logout');
 });
