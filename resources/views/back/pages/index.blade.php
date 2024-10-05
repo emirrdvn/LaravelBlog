@@ -8,10 +8,14 @@
         </h6>
     </div>
     <div class="card-body">
+        <div class="alert alert-success" style="display: none" id="orderSuccess">
+            Sıralama başarıyla güncellendi.
+        </div>
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
+                        <th>Sıralama</th>
                         <th>Fotoğraf</th>
                         <th>Makale Başlığı</th>
                         <th>Durum</th>
@@ -19,9 +23,12 @@
                     </tr>
                 </thead>
                 
-                <tbody>
+                <tbody id="orders">
                     @foreach($pages as $page)
-                    <tr>
+                    <tr id="page_{{$page->id}}">
+                        <td class="text-center" style="width:5px">
+                            <i class="fa fa-arrows-alt-v handle fa-3x" style="cursor: move;"></i>
+                        </td>
                         <td> <img src="{{$page->image}}" alt="" width="200"> </td>
                         <td>{{$page->title}}</td>
                         
@@ -54,6 +61,19 @@
 @endsection
 @section('js')
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.3/Sortable.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script>
+$('#orders').sortable({
+    handle:'.handle',
+    update:function(){
+        var siralama =$('#orders').sortable('serialize');
+        $.get("{{route('admin.page.orders')}}?"+siralama,function(data,status){
+            $("#orderSuccess").show().delay(1000).fadeOut();
+        });
+    }
+});
+</script>
 <script>
     $(function() {
         $('.switch').change(function() {

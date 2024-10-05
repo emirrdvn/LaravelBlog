@@ -9,6 +9,7 @@ use App\Models\Article;
 use App\Models\Page;
 use App\Models\Contact;
 use Validator;
+use Mail;
 
 
 class Homepage extends Controller
@@ -60,13 +61,24 @@ class Homepage extends Controller
         if($validate->fails()){
             return redirect()->route('contact')->withErrors($validate)->withInput();
         }
-
-        $contact= new Contact;
+        // LARAVEL 11'de daha farklı bu tam olmadı
+        Mail::raw('Mesajı Gönderen:'.$request->name.'<br/>
+                Mesajı gönderen mail :'.$request->email.'<br/>
+                Mesajı Konusu :'.$request->topic.'<br/>
+                Mesaj:'.$request->message.'<br/>  
+                Mesajı gönderilme tarihi :'.now().'<br/>',function($message) use($request){
+            $message->from('iletisim@blogsitesi.com','Blog Sitesi'); 
+            $message->to('iletisim@blogsitesi.com');
+            $message->subject($request->name.'mesaj gönderdi');
+        });
+        
+        //Yönetim Panelinde Göstermek için
+        /*$contact= new Contact;
         $contact->name=$request->name;
         $contact->email=$request->email;
         $contact->topic=$request->topic;
         $contact->message=$request->message;
-        $contact->save();
+        $contact->save();*/
         
 
         return redirect()->route('contact')->with('success','Mesajınız bize ulaştı');

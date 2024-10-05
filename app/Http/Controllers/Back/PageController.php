@@ -85,4 +85,10 @@ class PageController extends Controller
         return redirect()->route('admin.page.index');
     }
 
+    public function orders(Request $request){
+        
+        foreach($request->get('page') as $key => $order){
+            Page::where('id',$order)->update(['order'=>$key]);
+        }
+    }
 }
