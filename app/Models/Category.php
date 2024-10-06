@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     public function articleCount(){
-        return $this->hasMany('App\Models\Article', 'category', 'id')->count();
+        return $this->hasMany('App\Models\Article', 'category', 'id')->where('status',1)->count();
     }
     use HasFactory;
 }
